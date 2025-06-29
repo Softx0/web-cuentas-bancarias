@@ -54,27 +54,21 @@ Template moderno de React con TypeScript completamente configurado con las mejor
 git clone <tu-repo>
 cd web-cuentas-bancarias
 npm install
+
+# Para producción usa npm ci (más rápido y seguro)
+npm ci
 ```
 
-### 2. Variables de Entorno
+> **💡 Importante**: Este proyecto usa `package-lock.json` para garantizar versiones exactas de dependencias en todos los entornos. **Nunca elimines este archivo del repositorio**.
 
-Crea un archivo `.env` basado en las siguientes variables:
+### 2. Configurar Entorno (Automático) ⚡
 
 ```bash
-# API Configuration
-REACT_APP_API_BASE_URL=http://localhost:3001/api
-REACT_APP_API_TIMEOUT=10000
+# Hacer el script ejecutable
+chmod +x setup_env.sh
 
-# JWT Configuration
-REACT_APP_JWT_SECRET=your-jwt-secret-key
-REACT_APP_JWT_EXPIRES_IN=24h
-
-# Feature Flags
-REACT_APP_ENABLE_INACTIVITY_TIMER=true
-REACT_APP_DEFAULT_INACTIVITY_TIME=300000
-
-# Environment
-REACT_APP_ENVIRONMENT=development
+# Configurar para desarrollo
+./setup_env.sh DEV
 ```
 
 ### 3. Iniciar Desarrollo
@@ -83,7 +77,78 @@ REACT_APP_ENVIRONMENT=development
 npm start
 ```
 
-### 4. Build para Producción
+¡Listo! La aplicación estará disponible en `http://localhost:3000`
+
+---
+
+## 📋 Configuración Detallada
+
+### 1. Variables de Entorno
+
+#### Opción A: Configuración Automática (Recomendada) 🚀
+
+Usa el script automatizado para configurar el entorno:
+
+```bash
+# Para desarrollo
+./setup_env.sh DEV
+
+# Para QA/Testing
+./setup_env.sh QA
+
+# Para producción
+./setup_env.sh PROD
+```
+
+El script genera automáticamente un archivo `.env` con todas las variables necesarias para el entorno seleccionado.
+
+**Características del script:**
+
+- ✅ Configuración automática por entorno
+- ✅ Variables organizadas por categorías
+- ✅ Compatibilidad con Docker
+- ✅ Backup automático de configuraciones anteriores
+- ✅ Validación de variables requeridas
+
+**Entornos disponibles:**
+
+- **DEV**: Desarrollo local con hot reload
+- **QA**: Testing y validación
+- **PROD**: Producción optimizada
+
+#### Opción B: Configuración Manual
+
+Si prefieres configurar manualmente, crea un archivo `.env` con estas variables:
+
+```bash
+# API Configuration
+VITE_API_BASE_URL=http://localhost:3001/api
+VITE_API_TIMEOUT=10000
+
+# JWT Configuration
+VITE_JWT_SECRET=your-jwt-secret-key
+VITE_JWT_EXPIRES_IN=24h
+
+# Feature Flags
+VITE_ENABLE_INACTIVITY_TIMER=true
+VITE_DEFAULT_INACTIVITY_TIME=300000
+
+# Environment
+VITE_ENVIRONMENT=development
+
+# Docker & Build
+TAG_IMAGE=web-cuentas-app:latest
+NODE_ENV=development
+PORT=3000
+```
+
+### 2. Desarrollo Manual (Si no usas el script)
+
+```bash
+npm start
+```
+
+### 3. Build para Producción
 
 ```bash
 npm run build
@@ -219,6 +284,50 @@ src/
 - **Inactividad configurable**: Timeouts específicos por página crítica
 - **Interceptors**: Manejo centralizado de autenticación en APIs
 
+## 🔒 Gestión de Dependencias
+
+### ¿Por qué se incluye `package-lock.json`?
+
+Este archivo es **CRÍTICO** para el proyecto y garantiza:
+
+#### ✅ **Builds Reproducibles**
+
+- Todos los desarrolladores instalan las **mismas versiones exactas**
+- CI/CD usa las **mismas dependencias** que desarrollo
+- Eliminación del problema _"funciona en mi máquina"_
+
+#### ⚡ **Performance**
+
+```bash
+# Desarrollo inicial
+npm install    # Resuelve dependencias
+
+# CI/CD y producción
+npm ci         # 2-3x más rápido, no modifica package-lock.json
+```
+
+#### 🛡️ **Seguridad**
+
+- **Hashes de integridad** verifican que los paquetes no fueron alterados
+- **Versiones fijadas** previenen ataques de supply chain
+- **Auditorías consistentes** con `npm audit`
+
+#### 🎯 **Comandos Recomendados**
+
+```bash
+# ✅ DESARROLLO
+npm install              # Actualiza package-lock.json si es necesario
+
+# ✅ PRODUCCIÓN/CI/CD
+npm ci                   # Instalación rápida y exacta
+
+# ✅ ACTUALIZAR DEPENDENCIAS
+npm update               # Actualiza dentro de rangos permitidos
+npm audit fix            # Corrige vulnerabilidades automáticamente
+```
+
+> **⚠️ Nunca elimines `package-lock.json` del repositorio**. Es tan importante como el código fuente.
+
 ## 📘 Configuración Completa
 
 Para una configuración paso a paso detallada de todo el proyecto, consulta la **[📋 Guía Completa de Configuración](./SETUP_GUIDE.md)**, que incluye:
@@ -233,12 +342,30 @@ Para una configuración paso a paso detallada de todo el proyecto, consulta la *
 
 ## 🔧 Scripts Disponibles
 
+### Configuración
+
+```bash
+./setup_env.sh DEV     # Configurar entorno de desarrollo
+./setup_env.sh QA      # Configurar entorno de QA
+./setup_env.sh PROD    # Configurar entorno de producción
+```
+
 ### Desarrollo
 
 ```bash
 npm start            # Iniciar servidor de desarrollo
 npm run build        # Build para producción
 npm run eject        # Eject de Create React App (no recomendado)
+```
+
+### Gestión de Dependencias
+
+```bash
+npm install          # Instalar/actualizar dependencias (desarrollo)
+npm ci               # Instalación exacta para CI/CD (más rápido)
+npm update           # Actualizar dependencias dentro de rangos
+npm audit            # Auditar vulnerabilidades
+npm audit fix        # Corregir vulnerabilidades automáticamente
 ```
 
 ### Calidad de Código

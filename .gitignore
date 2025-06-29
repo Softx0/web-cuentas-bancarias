@@ -158,10 +158,20 @@ Thumbs.db
 # TypeScript
 *.tsbuildinfo
 
-# Optional: Package manager lock files (descomentar el que NO uses)
-# package-lock.json  # Si usas yarn
-# yarn.lock          # Si usas npm
-# pnpm-lock.yaml     # Si usas pnpm
+# IMPORTANT: Lock files MUST be committed for reproducible builds
+# Only ignore the lock files you DON'T use (uncomment as needed)
+
+# If you use npm, keep package-lock.json and ignore others:
+yarn.lock
+pnpm-lock.yaml
+
+# If you use yarn, keep yarn.lock and ignore others:
+# package-lock.json
+# pnpm-lock.yaml
+
+# If you use pnpm, keep pnpm-lock.yaml and ignore others:
+# package-lock.json
+# yarn.lock
 
 # Backup files
 *.bak
