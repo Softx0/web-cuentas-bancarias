@@ -13,7 +13,7 @@ Este es un proyecto para la gestión de cuentas bancarias donde se tiene la capa
 ### 🔧 Tecnologías Core
 
 - **React 18** con TypeScript
-- **Create React App** como build tool
+- **Vite** como build tool (más rápido que CRA)
 - **TailwindCSS** para estilos
 - **React Router DOM** para navegación con lazy loading
 - **Context API** para manejo de estado (siguiendo SOLID)
@@ -58,26 +58,26 @@ Este es un proyecto para la gestión de cuentas bancarias donde se tiene la capa
 git clone <https o ssh link>
 cd web-cuentas-bancarias
 npm install
-
-# Para producción usa npm ci (más rápido y seguro)
-npm ci
 ```
 
 > **💡 Importante**: Este proyecto usa `package-lock.json` para garantizar versiones exactas de dependencias en todos los entornos. **Nunca elimines este archivo del repositorio**.
+>
+> **Para CI/CD**: Usa `npm ci` (más rápido y seguro en pipelines de deploy)
 
 ### 2. Configurar Entorno (Automático) ⚡
 
 ```bash
-# Hacer el script ejecutable
-chmod +x setup_env.sh
-
 # Configurar para desarrollo
 ./setup_env.sh DEV
 ```
 
+> **✅ Script ya configurado**: El script ya tiene permisos de ejecución y está listo para usar
+
 ### 3. Iniciar Desarrollo
 
 ```bash
+npm run dev
+# o también funciona:
 npm start
 ```
 
@@ -104,7 +104,12 @@ Usa el script automatizado para configurar el entorno:
 ./setup_env.sh PROD
 ```
 
-El script genera automáticamente un archivo `.env` con todas las variables necesarias para el entorno seleccionado.
+**¿Qué hace el script?**
+
+1. **Genera un archivo `.env`** en la raíz del proyecto
+2. **Configura todas las variables** necesarias para el entorno seleccionado
+3. **Vite automáticamente** lee estas variables con prefijo `VITE_*`
+4. **Tu aplicación** accede a ellas través de `src/config/env.ts`
 
 **Características del script:**
 
@@ -116,9 +121,9 @@ El script genera automáticamente un archivo `.env` con todas las variables nece
 
 **Entornos disponibles:**
 
-- **DEV**: Desarrollo local con hot reload
-- **QA**: Testing y validación
-- **PROD**: Producción optimizada
+- **DEV**: Desarrollo local (API local, logs habilitados, timeouts largos)
+- **QA**: Testing y validación (API de testing, logs mínimos)
+- **PROD**: Producción optimizada (API productiva, sin logs, timeouts estrictos)
 
 #### Opción B: Configuración Manual
 
@@ -149,7 +154,7 @@ PORT=3000
 ### 2. Desarrollo Manual (Si no usas el script)
 
 ```bash
-npm start
+npm run dev
 ```
 
 ### 3. Build para Producción
@@ -157,6 +162,78 @@ npm start
 ```bash
 npm run build
 ```
+
+## 🔧 Sistema de Variables de Entorno
+
+### **Flujo Completo** 🔄
+
+1. **Script genera .env**
+
+   ```bash
+   ./setup_env.sh DEV
+   # ↓ Crea archivo .env con variables VITE_*
+   ```
+
+2. **Vite lee las variables**
+
+   ```bash
+   # .env (generado automáticamente)
+   VITE_API_BASE_URL=http://localhost:3001/api
+   VITE_JWT_SECRET=your-secret-key
+   ```
+
+3. **Aplicación usa las variables**
+
+   ```typescript
+   // src/config/env.ts
+   export const config = {
+     api: {
+       baseUrl: import.meta.env.VITE_API_BASE_URL, // ← Del archivo .env
+     },
+   };
+   ```
+
+4. **Componentes acceden a la configuración**
+
+   ```typescript
+   // En cualquier componente
+   import { config } from "../config/env";
+
+   console.log(config.api.baseUrl); // ← Valor del .env
+   ```
+
+### **¿Necesito crear .env manualmente?** ❓
+
+**No, el script lo hace por ti.** Pero si quieres:
+
+```bash
+# Crear .env manualmente (alternativa al script)
+touch .env
+echo "VITE_API_BASE_URL=http://localhost:3001/api" >> .env
+echo "VITE_JWT_SECRET=your-secret-key" >> .env
+# ... más variables
+```
+
+### **Variables Disponibles** 📋
+
+| Variable                       | Descripción               | Ejemplo                     |
+| ------------------------------ | ------------------------- | --------------------------- |
+| `VITE_API_BASE_URL`            | URL base de la API        | `http://localhost:3001/api` |
+| `VITE_API_TIMEOUT`             | Timeout de requests       | `10000`                     |
+| `VITE_JWT_SECRET`              | Clave secreta JWT         | `your-secret-key`           |
+| `VITE_JWT_EXPIRES_IN`          | Expiración JWT            | `24h`                       |
+| `VITE_ENABLE_INACTIVITY_TIMER` | Activar timer inactividad | `true`                      |
+| `VITE_DEFAULT_INACTIVITY_TIME` | Tiempo por defecto (ms)   | `300000`                    |
+| `VITE_ENVIRONMENT`             | Entorno actual            | `development`               |
+
+> **🎯 Resumen**: El sistema funciona así:
+>
+> 1. **Ejecutas**: `./setup_env.sh DEV`
+> 2. **Se crea**: `.env` con variables `VITE_*`
+> 3. **Vite las lee**: automáticamente cuando ejecutas `npm run dev`
+> 4. **Tu app las usa**: a través de `import.meta.env.VITE_*` en `src/config/env.ts`
+>
+> **No necesitas crear `.env` manualmente**, el script lo hace por ti.
 
 ## 📱 Uso de la Aplicación
 
@@ -357,9 +434,10 @@ Para una configuración paso a paso detallada de todo el proyecto, consulta la *
 ### Desarrollo
 
 ```bash
-npm start            # Iniciar servidor de desarrollo
+npm run dev          # Iniciar servidor de desarrollo (Vite)
+npm start            # Alias para npm run dev
 npm run build        # Build para producción
-npm run eject        # Eject de Create React App (no recomendado)
+npm run preview      # Preview del build de producción
 ```
 
 ### Gestión de Dependencias
@@ -412,7 +490,7 @@ npm run test:coverage # Tests con coverage
 
 ### Desarrollo
 
-- Hot reload con Create React App
+- Hot reload ultra-rápido con Vite
 - Type checking en tiempo real con TypeScript
 - Git hooks automatizados con Husky
 - Mensajes de commit estandarizados con Commitlint
