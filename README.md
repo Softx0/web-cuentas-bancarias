@@ -2,8 +2,6 @@
 
 ## 📋 Descripción
 
-Template moderno de React con TypeScript completamente configurado con las mejores prácticas de desarrollo. Incluye autenticación, rutas protegidas, sistema de inactividad, y arquitectura escalable siguiendo principios SOLID.
-
 ## ✨ Características Principales
 
 ### 🔧 Tecnologías Core
@@ -51,7 +49,7 @@ Template moderno de React con TypeScript completamente configurado con las mejor
 ### 1. Clonar e Instalar
 
 ```bash
-git clone <tu-repo>
+git clone <https o ssh link>
 cd web-cuentas-bancarias
 npm install
 
