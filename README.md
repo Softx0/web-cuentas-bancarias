@@ -1,6 +1,12 @@
-# React TypeScript Template 2024 🚀
+# Web Cuentas Bancarias
 
 ## 📋 Descripción
+
+Este es un proyecto para la gestión de cuentas bancarias donde se tiene la capacidad de:
+
+• Consultar el saldo de una cuenta
+• Visualizar transacciones recientes
+• Realizar transferencias de dinero entre cuentas
 
 ## ✨ Características Principales
 
