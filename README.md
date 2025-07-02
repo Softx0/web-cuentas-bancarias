@@ -46,7 +46,7 @@ Este es un proyecto para la gestión de cuentas bancarias donde se tiene la capa
 ### 🐳 DevOps y Deploy
 
 - **Docker** con nginx para producción
-- **CI/CD** con Azure Pipelines y GitLab
+- **CI/CD** con Azure Pipelines
 - Scripts de deploy automatizados
 - Configuración de variables de entorno
 

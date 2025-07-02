@@ -8,7 +8,7 @@ const AccountDetail = React.lazy(
 );
 const Transfer = React.lazy(() => import("../../pages/Transfer/Transfer"));
 
-export const dashboardRoutes: RouteConfig[] = [
+export const accountRoutes: RouteConfig[] = [
   {
     path: "/accounts",
     element: <Accounts />,
