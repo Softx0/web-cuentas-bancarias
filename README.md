@@ -191,11 +191,7 @@ npm ci         # 2-3x más rápido, no modifica package-lock.json
 
 ## 🔄 CI/CD
 
-Incluye configuración para:
-
 - **Azure Pipelines** (`azure-pipelines.yml`)
-- **GitLab CI** (`.gitlab-ci.yml`)
-- **GitHub Actions** (opcional)
 
 ## 📚 Clean Architecture
 
