@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useReducer, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  ReactNode,
+  useCallback,
+} from "react";
 import {
   AccountsState,
   Account,
@@ -80,7 +86,7 @@ export const AccountsProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [state, dispatch] = useReducer(accountsReducer, initialState);
 
-  const loadAccounts = async (): Promise<void> => {
+  const loadAccounts = useCallback(async (): Promise<void> => {
     try {
       dispatch({ type: "SET_LOADING", payload: true });
       const accounts = await bankingService.getAccounts();
@@ -88,100 +94,113 @@ export const AccountsProvider: React.FC<{ children: ReactNode }> = ({
     } catch (error) {
       dispatch({ type: "SET_ERROR", payload: "Error al cargar las cuentas" });
     }
-  };
+  }, []);
 
-  const selectAccount = async (accountId: string): Promise<void> => {
-    try {
-      dispatch({ type: "SET_LOADING", payload: true });
-      const account = await bankingService.getAccountById(accountId);
-      dispatch({ type: "SET_SELECTED_ACCOUNT", payload: account });
-
-      if (account) {
-        await loadTransactions(accountId);
+  const loadTransactions = useCallback(
+    async (accountId: string): Promise<void> => {
+      try {
+        dispatch({ type: "SET_LOADING", payload: true });
+        const transactions = await bankingService.getTransactions(accountId);
+        dispatch({ type: "SET_TRANSACTIONS", payload: transactions });
+      } catch (error) {
+        dispatch({
+          type: "SET_ERROR",
+          payload: "Error al cargar las transacciones",
+        });
       }
-    } catch (error) {
-      dispatch({
-        type: "SET_ERROR",
-        payload: "Error al seleccionar la cuenta",
-      });
-    }
-  };
+    },
+    []
+  );
 
-  const loadTransactions = async (accountId: string): Promise<void> => {
-    try {
-      dispatch({ type: "SET_LOADING", payload: true });
-      const transactions = await bankingService.getTransactions(accountId);
-      dispatch({ type: "SET_TRANSACTIONS", payload: transactions });
-    } catch (error) {
-      dispatch({
-        type: "SET_ERROR",
-        payload: "Error al cargar las transacciones",
-      });
-    }
-  };
+  const selectAccount = useCallback(
+    async (accountId: string): Promise<void> => {
+      try {
+        dispatch({ type: "SET_LOADING", payload: true });
+        const account = await bankingService.getAccountById(accountId);
+        dispatch({ type: "SET_SELECTED_ACCOUNT", payload: account });
 
-  const applyFilters = (filters: FilterOptions): void => {
-    dispatch({ type: "SET_FILTERS", payload: filters });
-
-    let filteredTransactions = [...state.transactions];
-
-    // Filtro por fecha
-    if (filters.dateFrom) {
-      filteredTransactions = filteredTransactions.filter(
-        (transaction) =>
-          new Date(transaction.date) >= new Date(filters.dateFrom)
-      );
-    }
-
-    if (filters.dateTo) {
-      filteredTransactions = filteredTransactions.filter(
-        (transaction) => new Date(transaction.date) <= new Date(filters.dateTo)
-      );
-    }
-
-    // Filtro por tipo de transacción
-    if (filters.transactionType !== "all") {
-      filteredTransactions = filteredTransactions.filter(
-        (transaction) => transaction.type === filters.transactionType
-      );
-    }
-
-    dispatch({
-      type: "SET_FILTERED_TRANSACTIONS",
-      payload: filteredTransactions,
-    });
-  };
-
-  const transferMoney = async (
-    transferData: TransferRequest
-  ): Promise<{ success: boolean; message: string }> => {
-    try {
-      dispatch({ type: "SET_LOADING", payload: true });
-      const result = await bankingService.transfer(transferData);
-
-      if (result.success) {
-        // Recargar las cuentas para mostrar los saldos actualizados
-        await loadAccounts();
-
-        // Si hay una cuenta seleccionada, recargar sus transacciones
-        if (state.selectedAccount) {
-          await loadTransactions(state.selectedAccount.id);
+        if (account) {
+          await loadTransactions(accountId);
         }
+      } catch (error) {
+        dispatch({
+          type: "SET_ERROR",
+          payload: "Error al seleccionar la cuenta",
+        });
+      }
+    },
+    [loadTransactions]
+  );
+
+  const applyFilters = useCallback(
+    (filters: FilterOptions): void => {
+      dispatch({ type: "SET_FILTERS", payload: filters });
+
+      let filteredTransactions = [...state.transactions];
+
+      // Filtro por fecha
+      if (filters.dateFrom) {
+        filteredTransactions = filteredTransactions.filter(
+          (transaction) =>
+            new Date(transaction.date) >= new Date(filters.dateFrom)
+        );
       }
 
-      dispatch({ type: "SET_LOADING", payload: false });
-      return result;
-    } catch (error) {
+      if (filters.dateTo) {
+        filteredTransactions = filteredTransactions.filter(
+          (transaction) =>
+            new Date(transaction.date) <= new Date(filters.dateTo)
+        );
+      }
+
+      // Filtro por tipo de transacción
+      if (filters.transactionType !== "all") {
+        filteredTransactions = filteredTransactions.filter(
+          (transaction) => transaction.type === filters.transactionType
+        );
+      }
+
       dispatch({
-        type: "SET_ERROR",
-        payload: "Error al realizar la transferencia",
+        type: "SET_FILTERED_TRANSACTIONS",
+        payload: filteredTransactions,
       });
-      return {
-        success: false,
-        message: "Error al realizar la transferencia",
-      };
-    }
-  };
+    },
+    [state.transactions]
+  );
+
+  const transferMoney = useCallback(
+    async (
+      transferData: TransferRequest
+    ): Promise<{ success: boolean; message: string }> => {
+      try {
+        dispatch({ type: "SET_LOADING", payload: true });
+        const result = await bankingService.transfer(transferData);
+
+        if (result.success) {
+          // Recargar las cuentas para mostrar los saldos actualizados
+          await loadAccounts();
+
+          // Si hay una cuenta seleccionada, recargar sus transacciones
+          if (state.selectedAccount) {
+            await loadTransactions(state.selectedAccount.id);
+          }
+        }
+
+        dispatch({ type: "SET_LOADING", payload: false });
+        return result;
+      } catch (error) {
+        dispatch({
+          type: "SET_ERROR",
+          payload: "Error al realizar la transferencia",
+        });
+        return {
+          success: false,
+          message: "Error al realizar la transferencia",
+        };
+      }
+    },
+    [loadAccounts, loadTransactions, state.selectedAccount]
+  );
 
   return (
     <AccountsContext.Provider

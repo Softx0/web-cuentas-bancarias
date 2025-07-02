@@ -12,7 +12,7 @@ export const AccountCard: React.FC<AccountCardProps> = ({
   onClick,
 }) => {
   const formatCurrency = (amount: number, currency: string): string => {
-    return new Intl.NumberFormat("es-CO", {
+    return new Intl.NumberFormat("es-DO", {
       style: "currency",
       currency: currency,
     }).format(amount);
@@ -65,7 +65,7 @@ export const AccountCard: React.FC<AccountCardProps> = ({
           </p>
           <p className="text-xs text-gray-400">
             Última actividad:{" "}
-            {new Date(account.lastTransactionDate).toLocaleDateString()}
+            {new Date(account.lastTransactionDate).toLocaleDateString("es-DO")}
           </p>
         </div>
       </div>

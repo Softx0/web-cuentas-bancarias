@@ -106,7 +106,7 @@ export const Login = () => {
           </div>
 
           <div className="text-center text-sm text-gray-600">
-            <p>Usa cualquier email y contraseña para la demo</p>
+            <p>Usa cualquier email y contraseña para pruebas</p>
           </div>
         </form>
       </div>

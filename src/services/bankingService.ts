@@ -58,16 +58,26 @@ class BankingService {
         const date = new Date();
         date.setDate(date.getDate() - i);
 
+        const transactionType = Math.random() > 0.6 ? "credit" : "debit";
+        const description =
+          transactionType === "credit"
+            ? this.getCreditDescription()
+            : this.getDebitDescription();
+        const category =
+          transactionType === "credit"
+            ? this.getCreditCategory()
+            : this.getDebitCategory();
+
         transactions.push({
           id: `${account.id}-${i}`,
           accountId: account.id,
-          type: Math.random() > 0.6 ? "credit" : "debit",
+          type: transactionType,
           amount: Math.floor(Math.random() * 500000) + 10000,
-          description: this.getRandomDescription(),
+          description: description,
           date: date.toISOString().split("T")[0],
           balance: account.balance,
           reference: `REF${Date.now()}${i}`,
-          category: this.getRandomCategory(),
+          category: category,
         });
       }
     });
@@ -77,34 +87,70 @@ class BankingService {
     );
   }
 
-  private getRandomDescription(): string {
-    const descriptions = [
-      "Transferencia recibida",
+  private getDebitDescription(): string {
+    const debitDescriptions = [
       "Compra en supermercado",
       "Pago de servicios",
       "Retiro cajero automático",
-      "Depósito en efectivo",
       "Transferencia enviada",
       "Pago tarjeta crédito",
       "Compra online",
-      "Salario mensual",
-      "Pago de nómina",
+      "Pago de préstamo",
+      "Compra en farmacia",
+      "Pago de combustible",
+      "Compra en restaurante",
     ];
-    return descriptions[Math.floor(Math.random() * descriptions.length)];
+    return debitDescriptions[
+      Math.floor(Math.random() * debitDescriptions.length)
+    ];
   }
 
-  private getRandomCategory(): string {
-    const categories = [
+  private getCreditDescription(): string {
+    const creditDescriptions = [
+      "Transferencia recibida",
+      "Depósito en efectivo",
+      "Salario mensual",
+      "Pago de nómina",
+      "Devolución de compra",
+      "Intereses ganados",
+      "Bono recibido",
+      "Reembolso de seguro",
+      "Dividendos recibidos",
+      "Depósito por transferencia",
+    ];
+    return creditDescriptions[
+      Math.floor(Math.random() * creditDescriptions.length)
+    ];
+  }
+
+  private getDebitCategory(): string {
+    const debitCategories = [
       "Alimentación",
       "Transporte",
       "Servicios",
       "Entretenimiento",
-      "Salario",
       "Transferencias",
       "Pagos",
+      "Compras",
+      "Combustible",
+    ];
+    return debitCategories[Math.floor(Math.random() * debitCategories.length)];
+  }
+
+  private getCreditCategory(): string {
+    const creditCategories = [
+      "Salario",
+      "Transferencias",
+      "Depósitos",
+      "Reembolsos",
+      "Intereses",
+      "Bonos",
+      "Ingresos",
       "Otros",
     ];
-    return categories[Math.floor(Math.random() * categories.length)];
+    return creditCategories[
+      Math.floor(Math.random() * creditCategories.length)
+    ];
   }
 
   // Endpoints simulados

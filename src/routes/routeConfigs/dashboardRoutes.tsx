@@ -1,9 +1,6 @@
 import React from "react";
 import { RouteConfig } from "../types/route.types";
 
-// Lazy loading para páginas del dashboard
-const Dashboard = React.lazy(() => import("../../pages/Dashboard/Dashboard"));
-
 // Lazy loading para páginas del banking
 const Accounts = React.lazy(() => import("../../pages/Accounts/Accounts"));
 const AccountDetail = React.lazy(
@@ -13,17 +10,6 @@ const Transfer = React.lazy(() => import("../../pages/Transfer/Transfer"));
 
 export const dashboardRoutes: RouteConfig[] = [
   {
-    path: "/dashboard",
-    element: <Dashboard />,
-    isProtected: true,
-    inactivityTimeout: 10000, // 20 segundos
-    meta: {
-      title: "Dashboard Principal",
-      description: "Panel principal de la aplicación",
-      requiresAuth: true,
-    },
-  },
-{
     path: "/accounts",
     element: <Accounts />,
     isProtected: true,

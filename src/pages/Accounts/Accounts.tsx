@@ -29,6 +29,26 @@ const Accounts: React.FC = () => {
     );
   }
 
+  if (accountsState.error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 text-5xl mb-4">⚠️</div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            Error al cargar las cuentas
+          </h2>
+          <p className="text-red-600 mb-6">{accountsState.error}</p>
+          <div className="space-x-4">
+            <Button onClick={loadAccounts}>Reintentar</Button>
+            <Button variant="outline" onClick={logout}>
+              Cerrar Sesión
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -39,12 +59,14 @@ const Accounts: React.FC = () => {
               <h1 className="text-xl font-semibold">Mis Cuentas</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-gray-700">
-                Hola, {authState.user?.name}
-              </span>
-              <Button variant="outline" onClick={() => navigate("/transfer")}>
-                Transferir
-              </Button>
+              <div className="text-right">
+                <span className="text-gray-700 block">
+                  Hola, {authState.user?.name}
+                </span>
+                <span className="text-gray-500 text-sm block">
+                  {authState.user?.email}
+                </span>
+              </div>
               <Button variant="danger" onClick={logout}>
                 Cerrar Sesión
               </Button>
@@ -67,7 +89,7 @@ const Accounts: React.FC = () => {
                   Total en Cuentas
                 </h3>
                 <p className="text-2xl font-bold text-green-600">
-                  {new Intl.NumberFormat("es-CO", {
+                  {new Intl.NumberFormat("es-DO", {
                     style: "currency",
                     currency: "DOP",
                   }).format(
@@ -90,7 +112,7 @@ const Accounts: React.FC = () => {
                   Deuda en Tarjetas
                 </h3>
                 <p className="text-2xl font-bold text-red-600">
-                  {new Intl.NumberFormat("es-CO", {
+                  {new Intl.NumberFormat("es-DO", {
                     style: "currency",
                     currency: "DOP",
                   }).format(
@@ -120,15 +142,30 @@ const Accounts: React.FC = () => {
               </Button>
             </div>
 
-            <div className="space-y-4">
-              {accountsState.accounts.map((account) => (
-                <AccountCard
-                  key={account.id}
-                  account={account}
-                  onClick={() => handleAccountClick(account.id)}
-                />
-              ))}
-            </div>
+            {accountsState.accounts.length === 0 ? (
+              <div className="text-center py-12">
+                <div className="text-gray-400 text-6xl mb-4">🏦</div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  No tienes cuentas registradas
+                </h3>
+                <p className="text-gray-500 mb-6">
+                  Contacta a tu asesor para abrir una nueva cuenta
+                </p>
+                <Button variant="outline" onClick={loadAccounts}>
+                  Actualizar
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {accountsState.accounts.map((account) => (
+                  <AccountCard
+                    key={account.id}
+                    account={account}
+                    onClick={() => handleAccountClick(account.id)}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </main>
