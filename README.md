@@ -37,7 +37,7 @@ Este es un proyecto para la gestión de cuentas bancarias donde se tiene la capa
 
 ### 🛠️ Herramientas de Desarrollo
 
-- **ESLint** con configuración Airbnb
+- **ESLint** con configuración personalizada
 - **Prettier** para formateo de código
 - **Husky** para git hooks
 - **Commitlint** para mensajes de commit

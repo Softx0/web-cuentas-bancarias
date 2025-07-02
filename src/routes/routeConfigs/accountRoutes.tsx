@@ -1,11 +1,10 @@
 import React from "react";
-import { RouteConfig } from "../types/route.types";
+import {RouteConfig} from "../types/route.types";
 
 // Lazy loading para páginas del banking
 const Accounts = React.lazy(() => import("../../pages/Accounts/Accounts"));
-const AccountDetail = React.lazy(
-  () => import("../../pages/AccountDetail/AccountDetail")
-);
+const AccountDetail = React.lazy(() => import("../../pages/AccountDetail/AccountDetail"));
+
 const Transfer = React.lazy(() => import("../../pages/Transfer/Transfer"));
 
 export const accountRoutes: RouteConfig[] = [
@@ -17,8 +16,8 @@ export const accountRoutes: RouteConfig[] = [
     meta: {
       title: "Mis Cuentas",
       description: "Listado de cuentas bancarias",
-      requiresAuth: true,
-    },
+      requiresAuth: true
+    }
   },
   {
     path: "/account/:accountId",
@@ -28,8 +27,8 @@ export const accountRoutes: RouteConfig[] = [
     meta: {
       title: "Detalle de Cuenta",
       description: "Información detallada de la cuenta",
-      requiresAuth: true,
-    },
+      requiresAuth: true
+    }
   },
   {
     path: "/transfer",
@@ -39,7 +38,7 @@ export const accountRoutes: RouteConfig[] = [
     meta: {
       title: "Transferir Dinero",
       description: "Realizar transferencias entre cuentas",
-      requiresAuth: true,
-    },
-  },
+      requiresAuth: true
+    }
+  }
 ];

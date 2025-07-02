@@ -1,0 +1,45 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+build/
+public/
+
+# Configuration files
+*.config.js
+*.config.ts
+vite.config.ts
+tailwind.config.js
+postcss.config.js
+
+# Environment files
+.env*
+
+# IDE files
+.vscode/
+.idea/
+
+# Testing coverage
+coverage/
+
+# Logs
+*.log
+
+# Azure pipelines
+azure-pipelines.yml
+
+# Docker
+Dockerfile
+nginx.conf
+
+# Git
+.git/
+.gitignore
+
+# Husky
+.husky/
+
+# Setup scripts
+setup_env.sh 

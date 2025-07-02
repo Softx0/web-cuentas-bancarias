@@ -1,5 +1,5 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { Table, TableRow, TableCell } from "./Table";
+import {render, screen, fireEvent} from "@testing-library/react";
+import {Table, TableRow, TableCell} from "./Table";
 
 describe("Table Components", () => {
   const mockHeaders = ["Header 1", "Header 2", "Header 3"];
@@ -25,7 +25,7 @@ describe("Table Components", () => {
     });
 
     test("applies custom className", () => {
-      const { container } = render(
+      const {container} = render(
         <Table headers={mockHeaders} className="custom-table">
           <TableRow>
             <TableCell>Content</TableCell>
@@ -46,9 +46,7 @@ describe("Table Components", () => {
       );
 
       expect(screen.getByRole("table")).toBeInTheDocument();
-      expect(
-        screen.getByRole("columnheader", { name: "Header 1" })
-      ).toBeInTheDocument();
+      expect(screen.getByRole("columnheader", {name: "Header 1"})).toBeInTheDocument();
     });
   });
 
@@ -69,6 +67,7 @@ describe("Table Components", () => {
 
     test("calls onClick when row is clicked", () => {
       const mockClick = jest.fn();
+
       render(
         <table>
           <tbody>
@@ -85,6 +84,7 @@ describe("Table Components", () => {
 
     test("applies cursor-pointer class when onClick is provided", () => {
       const mockClick = jest.fn();
+
       render(
         <table>
           <tbody>
@@ -96,6 +96,7 @@ describe("Table Components", () => {
       );
 
       const row = screen.getByRole("row");
+
       expect(row).toHaveClass("cursor-pointer");
     });
 
@@ -111,6 +112,7 @@ describe("Table Components", () => {
       );
 
       const row = screen.getByRole("row");
+
       expect(row).not.toHaveClass("cursor-pointer");
     });
 
@@ -126,6 +128,7 @@ describe("Table Components", () => {
       );
 
       const row = screen.getByRole("row");
+
       expect(row).toHaveClass("custom-row");
     });
   });
@@ -157,6 +160,7 @@ describe("Table Components", () => {
       );
 
       const cell = screen.getByRole("cell");
+
       expect(cell).toHaveClass("custom-cell");
     });
 
@@ -172,13 +176,8 @@ describe("Table Components", () => {
       );
 
       const cell = screen.getByRole("cell");
-      expect(cell).toHaveClass(
-        "px-6",
-        "py-4",
-        "whitespace-nowrap",
-        "text-sm",
-        "text-gray-900"
-      );
+
+      expect(cell).toHaveClass("px-6", "py-4", "whitespace-nowrap", "text-sm", "text-gray-900");
     });
   });
 

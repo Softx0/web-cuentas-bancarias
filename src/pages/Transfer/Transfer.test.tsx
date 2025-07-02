@@ -1,7 +1,7 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "../../context/AuthContext";
-import { AccountsProvider } from "../../context/AccountsContext";
+import {render, screen, fireEvent, waitFor} from "@testing-library/react";
+import {BrowserRouter} from "react-router-dom";
+import {AuthProvider} from "../../context/AuthContext";
+import {AccountsProvider} from "../../context/AccountsContext";
 import Transfer from "./Transfer";
 
 const mockNavigate = jest.fn();
@@ -9,7 +9,7 @@ const mockNavigate = jest.fn();
 // Mock del hook useNavigate
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockNavigate,
+  useNavigate: () => mockNavigate
 }));
 
 // Mock del bankingService
@@ -25,7 +25,7 @@ jest.mock("../../services/bankingService", () => ({
         name: "Cuenta Corriente Principal",
         isActive: true,
         createdAt: "2023-01-15",
-        lastTransactionDate: "2024-01-10",
+        lastTransactionDate: "2024-01-10"
       },
       {
         id: "2",
@@ -36,7 +36,7 @@ jest.mock("../../services/bankingService", () => ({
         name: "Cuenta de Ahorros",
         isActive: true,
         createdAt: "2023-03-20",
-        lastTransactionDate: "2024-01-08",
+        lastTransactionDate: "2024-01-08"
       },
       {
         id: "3",
@@ -47,18 +47,19 @@ jest.mock("../../services/bankingService", () => ({
         name: "Tarjeta de Crédito",
         isActive: true,
         createdAt: "2023-06-10",
-        lastTransactionDate: "2024-01-09",
-      },
+        lastTransactionDate: "2024-01-09"
+      }
     ]),
     transfer: jest.fn().mockResolvedValue({
       success: true,
-      message: "Transferencia realizada exitosamente",
-    }),
-  },
+      message: "Transferencia realizada exitosamente"
+    })
+  }
 }));
 
 // Mock de alert
 const mockAlert = jest.fn();
+
 global.alert = mockAlert;
 
 // Wrapper con todos los providers necesarios
@@ -116,6 +117,7 @@ describe("Transfer Page", () => {
 
     // Solo cuentas no-crédito deben aparecer en origen
     const fromAccountSelect = screen.getByLabelText("Cuenta Origen");
+
     expect(fromAccountSelect).toBeInTheDocument();
   });
 
@@ -130,15 +132,12 @@ describe("Transfer Page", () => {
     fireEvent.click(screen.getByText("Transferir"));
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Selecciona una cuenta origen")
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText("Selecciona una cuenta destino")
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText("Ingresa un monto válido mayor a 0")
-      ).toBeInTheDocument();
+      expect(screen.getByText("Selecciona una cuenta origen")).toBeInTheDocument();
+
+      expect(screen.getByText("Selecciona una cuenta destino")).toBeInTheDocument();
+
+      expect(screen.getByText("Ingresa un monto válido mayor a 0")).toBeInTheDocument();
+
       expect(screen.getByText("Ingresa una descripción")).toBeInTheDocument();
     });
   });
@@ -152,7 +151,8 @@ describe("Transfer Page", () => {
 
     // Seleccionar cuenta origen
     const fromAccountSelect = screen.getByLabelText("Cuenta Origen");
-    fireEvent.change(fromAccountSelect, { target: { value: "1" } });
+
+    fireEvent.change(fromAccountSelect, {target: {value: "1"}});
 
     await waitFor(() => {
       expect(screen.getByText("Saldo disponible:")).toBeInTheDocument();
@@ -176,20 +176,22 @@ describe("Transfer Page", () => {
 
     // Seleccionar cuenta origen
     const fromAccountSelect = screen.getByLabelText("Cuenta Origen");
-    fireEvent.change(fromAccountSelect, { target: { value: "1" } });
+
+    fireEvent.change(fromAccountSelect, {target: {value: "1"}});
 
     // Ingresar monto mayor al saldo
     const amountInput = screen.getByPlaceholderText("0.00");
-    fireEvent.change(amountInput, { target: { value: "3000000" } });
+
+    fireEvent.change(amountInput, {target: {value: "3000000"}});
 
     // Llenar otros campos requeridos
     const toAccountSelect = screen.getByLabelText("Cuenta Destino");
-    fireEvent.change(toAccountSelect, { target: { value: "2" } });
 
-    const descriptionInput = screen.getByPlaceholderText(
-      "Describe el motivo de la transferencia..."
-    );
-    fireEvent.change(descriptionInput, { target: { value: "Test transfer" } });
+    fireEvent.change(toAccountSelect, {target: {value: "2"}});
+
+    const descriptionInput = screen.getByPlaceholderText("Describe el motivo de la transferencia...");
+
+    fireEvent.change(descriptionInput, {target: {value: "Test transfer"}});
 
     // Intentar enviar
     fireEvent.click(screen.getByText("Transferir"));
@@ -208,18 +210,19 @@ describe("Transfer Page", () => {
 
     // Llenar formulario
     const fromAccountSelect = screen.getByLabelText("Cuenta Origen");
-    fireEvent.change(fromAccountSelect, { target: { value: "1" } });
+
+    fireEvent.change(fromAccountSelect, {target: {value: "1"}});
 
     const toAccountSelect = screen.getByLabelText("Cuenta Destino");
-    fireEvent.change(toAccountSelect, { target: { value: "2" } });
+
+    fireEvent.change(toAccountSelect, {target: {value: "2"}});
 
     const amountInput = screen.getByPlaceholderText("0.00");
-    fireEvent.change(amountInput, { target: { value: "100000" } });
+
+    fireEvent.change(amountInput, {target: {value: "100000"}});
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Resumen de la Transferencia")
-      ).toBeInTheDocument();
+      expect(screen.getByText("Resumen de la Transferencia")).toBeInTheDocument();
     });
   });
 
@@ -232,10 +235,12 @@ describe("Transfer Page", () => {
 
     // Llenar algunos campos
     const fromAccountSelect = screen.getByLabelText("Cuenta Origen");
-    fireEvent.change(fromAccountSelect, { target: { value: "1" } });
+
+    fireEvent.change(fromAccountSelect, {target: {value: "1"}});
 
     const amountInput = screen.getByPlaceholderText("0.00");
-    fireEvent.change(amountInput, { target: { value: "100000" } });
+
+    fireEvent.change(amountInput, {target: {value: "100000"}});
 
     // Limpiar formulario
     fireEvent.click(screen.getByText("Limpiar"));

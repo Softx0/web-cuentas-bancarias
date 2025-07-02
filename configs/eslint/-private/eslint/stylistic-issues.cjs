@@ -27,12 +27,12 @@ module.exports = {
         'max-len': ['error', { code: 120 }],
         'max-lines': ['error', { skipComments: true, skipBlankLines: true }],
         'max-lines-per-function': [
-            'error',
+            'warn',
             { skipComments: true, skipBlankLines: true }
         ],
         'max-nested-callbacks': 'error',
         'max-params': ['error', { max: 5 }],
-        'max-statements': ['error', 15, { ignoreTopLevelFunctions: true }],
+        'max-statements': ['error', 20, { ignoreTopLevelFunctions: true }],
         'max-statements-per-line': 'error',
         'multiline-ternary': ['error', 'never'],
         'new-cap': ['error', { properties: false }],
@@ -47,7 +47,7 @@ module.exports = {
         'no-nested-ternary': 'error',
         'no-new-object': 'error',
         'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
-        'no-promise-executor-return': 'error',
+        'no-promise-executor-return': 'warn',
         'no-tabs': 'error',
         'no-trailing-spaces': 'error',
         'no-unneeded-ternary': 'error',

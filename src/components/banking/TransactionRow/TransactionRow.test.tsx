@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
-import { TransactionRow } from "./TransactionRow";
-import { Transaction } from "../../../types/banking.types";
+import {render, screen} from "@testing-library/react";
+import {TransactionRow} from "./TransactionRow";
+import {Transaction} from "../../../types/banking.types";
 
 const mockCreditTransaction: Transaction = {
   id: "1",
@@ -11,7 +11,7 @@ const mockCreditTransaction: Transaction = {
   date: "2024-01-15",
   balance: 500000,
   reference: "REF123456",
-  category: "Depósitos",
+  category: "Depósitos"
 };
 
 const mockDebitTransaction: Transaction = {
@@ -23,7 +23,7 @@ const mockDebitTransaction: Transaction = {
   date: "2024-01-14",
   balance: 450000,
   reference: "REF123457",
-  category: "Retiros",
+  category: "Retiros"
 };
 
 describe("TransactionRow Component", () => {
@@ -67,6 +67,7 @@ describe("TransactionRow Component", () => {
     );
 
     const amountElement = screen.getByText(/\+.*100[.,]000/);
+
     expect(amountElement).toBeInTheDocument();
     expect(amountElement).toHaveClass("text-green-600");
   });
@@ -81,6 +82,7 @@ describe("TransactionRow Component", () => {
     );
 
     const amountElement = screen.getByText(/-.*50[.,]000/);
+
     expect(amountElement).toBeInTheDocument();
     expect(amountElement).toHaveClass("text-red-600");
   });
@@ -107,15 +109,8 @@ describe("TransactionRow Component", () => {
     );
 
     const categoryElement = screen.getByText("Depósitos");
-    expect(categoryElement).toHaveClass(
-      "px-2",
-      "py-1",
-      "text-xs",
-      "font-medium",
-      "rounded-full",
-      "bg-gray-100",
-      "text-gray-800"
-    );
+
+    expect(categoryElement).toHaveClass("px-2", "py-1", "text-xs", "font-medium", "rounded-full", "bg-gray-100", "text-gray-800");
   });
 
   test("displays description and reference correctly", () => {
@@ -135,7 +130,7 @@ describe("TransactionRow Component", () => {
   });
 
   test("applies hover effect to row", () => {
-    const { container } = render(
+    const {container} = render(
       <table>
         <tbody>
           <TransactionRow transaction={mockCreditTransaction} />
@@ -144,13 +139,14 @@ describe("TransactionRow Component", () => {
     );
 
     const row = container.querySelector("tr");
+
     expect(row).toHaveClass("hover:bg-gray-50");
   });
 
   test("formats date correctly", () => {
     const transactionWithDifferentDate = {
       ...mockCreditTransaction,
-      date: "2024-12-25",
+      date: "2024-12-25"
     };
 
     render(

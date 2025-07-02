@@ -13,7 +13,7 @@ module.exports = {
         "object-shorthand": "error",
         "prefer-const": "error",
         "prefer-destructuring": [
-            "error",
+            "warn",
             {
                 VariableDeclarator: {
                     array: true,

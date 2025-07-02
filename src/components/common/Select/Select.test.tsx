@@ -1,10 +1,10 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { Select, Option } from "./Select";
+import {render, screen, fireEvent} from "@testing-library/react";
+import {Select, Option} from "./Select";
 
 const mockOptions: Option[] = [
-  { value: "option1", label: "Opción 1" },
-  { value: "option2", label: "Opción 2" },
-  { value: "option3", label: "Opción 3" },
+  {value: "option1", label: "Opción 1"},
+  {value: "option2", label: "Opción 2"},
+  {value: "option3", label: "Opción 3"}
 ];
 
 describe("Select Component", () => {
@@ -15,14 +15,7 @@ describe("Select Component", () => {
   });
 
   test("renders select with options", () => {
-    render(
-      <Select
-        options={mockOptions}
-        value=""
-        onChange={mockOnChange}
-        placeholder="Seleccionar opción"
-      />
-    );
+    render(<Select options={mockOptions} value="" onChange={mockOnChange} placeholder="Seleccionar opción" />);
 
     expect(screen.getByDisplayValue("Seleccionar opción")).toBeInTheDocument();
     expect(screen.getByText("Opción 1")).toBeInTheDocument();
@@ -31,14 +24,7 @@ describe("Select Component", () => {
   });
 
   test("displays label when provided", () => {
-    render(
-      <Select
-        options={mockOptions}
-        value=""
-        onChange={mockOnChange}
-        label="Test Label"
-      />
-    );
+    render(<Select options={mockOptions} value="" onChange={mockOnChange} label="Test Label" />);
 
     expect(screen.getByText("Test Label")).toBeInTheDocument();
   });
@@ -47,45 +33,32 @@ describe("Select Component", () => {
     render(<Select options={mockOptions} value="" onChange={mockOnChange} />);
 
     const select = screen.getByRole("combobox");
-    fireEvent.change(select, { target: { value: "option2" } });
+
+    fireEvent.change(select, {target: {value: "option2"}});
 
     expect(mockOnChange).toHaveBeenCalledWith("option2");
     expect(mockOnChange).toHaveBeenCalledTimes(1);
   });
 
   test("displays selected value", () => {
-    render(
-      <Select options={mockOptions} value="option2" onChange={mockOnChange} />
-    );
+    render(<Select options={mockOptions} value="option2" onChange={mockOnChange} />);
 
     const select = screen.getByRole("combobox") as HTMLSelectElement;
+
     expect(select.value).toBe("option2");
   });
 
   test("displays error message when error prop is provided", () => {
-    render(
-      <Select
-        options={mockOptions}
-        value=""
-        onChange={mockOnChange}
-        error="Este campo es requerido"
-      />
-    );
+    render(<Select options={mockOptions} value="" onChange={mockOnChange} error="Este campo es requerido" />);
 
     expect(screen.getByText("Este campo es requerido")).toBeInTheDocument();
   });
 
   test("applies error styles when error is present", () => {
-    render(
-      <Select
-        options={mockOptions}
-        value=""
-        onChange={mockOnChange}
-        error="Error message"
-      />
-    );
+    render(<Select options={mockOptions} value="" onChange={mockOnChange} error="Error message" />);
 
     const select = screen.getByRole("combobox");
+
     expect(select).toHaveClass("border-red-300");
   });
 
@@ -93,18 +66,12 @@ describe("Select Component", () => {
     render(<Select options={mockOptions} value="" onChange={mockOnChange} />);
 
     const select = screen.getByRole("combobox");
+
     expect(select).toHaveClass("border-gray-300");
   });
 
   test("applies custom className", () => {
-    const { container } = render(
-      <Select
-        options={mockOptions}
-        value=""
-        onChange={mockOnChange}
-        className="custom-class"
-      />
-    );
+    const {container} = render(<Select options={mockOptions} value="" onChange={mockOnChange} className="custom-class" />);
 
     expect(container.firstChild).toHaveClass("custom-class");
   });

@@ -1,16 +1,15 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
-import { AuthProvider } from "../../context/AuthContext";
-import { AccountsProvider } from "../../context/AccountsContext";
+import {render, screen, fireEvent, waitFor} from "@testing-library/react";
+import {BrowserRouter} from "react-router-dom";
+import {AuthProvider} from "../../context/AuthContext";
+import {AccountsProvider} from "../../context/AccountsContext";
 import Accounts from "./Accounts";
 
 const mockNavigate = jest.fn();
-const mockLogout = jest.fn();
 
 // Mock del hook useNavigate
 jest.mock("react-router-dom", () => ({
   ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockNavigate,
+  useNavigate: () => mockNavigate
 }));
 
 // Mock del bankingService
@@ -26,7 +25,7 @@ jest.mock("../../services/bankingService", () => ({
         name: "Cuenta Corriente Principal",
         isActive: true,
         createdAt: "2023-01-15",
-        lastTransactionDate: "2024-01-10",
+        lastTransactionDate: "2024-01-10"
       },
       {
         id: "2",
@@ -37,7 +36,7 @@ jest.mock("../../services/bankingService", () => ({
         name: "Cuenta de Ahorros",
         isActive: true,
         createdAt: "2023-03-20",
-        lastTransactionDate: "2024-01-08",
+        lastTransactionDate: "2024-01-08"
       },
       {
         id: "3",
@@ -48,10 +47,10 @@ jest.mock("../../services/bankingService", () => ({
         name: "Tarjeta de Crédito",
         isActive: true,
         createdAt: "2023-06-10",
-        lastTransactionDate: "2024-01-09",
-      },
-    ]),
-  },
+        lastTransactionDate: "2024-01-09"
+      }
+    ])
+  }
 }));
 
 // Wrapper con todos los providers necesarios
@@ -141,9 +140,7 @@ describe("Accounts Page", () => {
     renderWithProviders(<Accounts />);
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Cuenta Corriente Principal")
-      ).toBeInTheDocument();
+      expect(screen.getByText("Cuenta Corriente Principal")).toBeInTheDocument();
     });
 
     fireEvent.click(screen.getByText("Cuenta Corriente Principal"));

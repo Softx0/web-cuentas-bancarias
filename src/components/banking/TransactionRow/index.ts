@@ -1,1 +1,1 @@
-export { TransactionRow } from "./TransactionRow";
+export {TransactionRow} from "./TransactionRow";

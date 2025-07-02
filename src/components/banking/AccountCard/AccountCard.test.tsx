@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import { AccountCard } from "./AccountCard";
-import { Account } from "../../../types/banking.types";
+import {render, screen, fireEvent} from "@testing-library/react";
+import {AccountCard} from "./AccountCard";
+import {Account} from "../../../types/banking.types";
 
 const mockAccount: Account = {
   id: "1",
@@ -11,7 +11,7 @@ const mockAccount: Account = {
   name: "Cuenta Corriente Principal",
   isActive: true,
   createdAt: "2023-01-15",
-  lastTransactionDate: "2024-01-10",
+  lastTransactionDate: "2024-01-10"
 };
 
 const mockSavingsAccount: Account = {
@@ -23,7 +23,7 @@ const mockSavingsAccount: Account = {
   name: "Cuenta de Ahorros",
   isActive: true,
   createdAt: "2023-03-20",
-  lastTransactionDate: "2024-01-08",
+  lastTransactionDate: "2024-01-08"
 };
 
 const mockCreditAccount: Account = {
@@ -35,7 +35,7 @@ const mockCreditAccount: Account = {
   name: "Tarjeta de Crédito",
   isActive: true,
   createdAt: "2023-06-10",
-  lastTransactionDate: "2024-01-09",
+  lastTransactionDate: "2024-01-09"
 };
 
 describe("AccountCard Component", () => {
@@ -48,7 +48,8 @@ describe("AccountCard Component", () => {
   });
 
   test("displays correct account type labels", () => {
-    const { rerender } = render(<AccountCard account={mockAccount} />);
+    const {rerender} = render(<AccountCard account={mockAccount} />);
+
     expect(screen.getByText("Cuenta Corriente")).toBeInTheDocument();
 
     rerender(<AccountCard account={mockSavingsAccount} />);
@@ -59,7 +60,8 @@ describe("AccountCard Component", () => {
   });
 
   test("displays correct account type icons", () => {
-    const { rerender } = render(<AccountCard account={mockAccount} />);
+    const {rerender} = render(<AccountCard account={mockAccount} />);
+
     expect(screen.getByText("💳")).toBeInTheDocument();
 
     rerender(<AccountCard account={mockSavingsAccount} />);
@@ -77,14 +79,16 @@ describe("AccountCard Component", () => {
   });
 
   test("shows positive balance in green", () => {
-    const { container } = render(<AccountCard account={mockAccount} />);
+    const {container} = render(<AccountCard account={mockAccount} />);
     const balanceElement = container.querySelector(".text-green-600");
+
     expect(balanceElement).toBeInTheDocument();
   });
 
   test("shows negative balance in red", () => {
-    const { container } = render(<AccountCard account={mockCreditAccount} />);
+    const {container} = render(<AccountCard account={mockCreditAccount} />);
     const balanceElement = container.querySelector(".text-red-600");
+
     expect(balanceElement).toBeInTheDocument();
   });
 
@@ -95,6 +99,7 @@ describe("AccountCard Component", () => {
 
   test("calls onClick when card is clicked", () => {
     const mockClick = jest.fn();
+
     render(<AccountCard account={mockAccount} onClick={mockClick} />);
 
     fireEvent.click(screen.getByText("Cuenta Corriente Principal"));

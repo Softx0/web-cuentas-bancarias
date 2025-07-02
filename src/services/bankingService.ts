@@ -1,7 +1,8 @@
-import { Account, Transaction, TransferRequest } from "../types/banking.types";
+import {Account, Transaction, TransferRequest} from "../types/banking.types";
 
 class BankingService {
   private readonly ACCOUNTS_KEY = "banking_accounts";
+
   private readonly TRANSACTIONS_KEY = "banking_transactions";
 
   // Simular delay de red
@@ -21,7 +22,7 @@ class BankingService {
         name: "Cuenta Corriente Principal",
         isActive: true,
         createdAt: "2023-01-15",
-        lastTransactionDate: "2024-01-10",
+        lastTransactionDate: "2024-01-10"
       },
       {
         id: "2",
@@ -32,7 +33,7 @@ class BankingService {
         name: "Cuenta de Ahorros",
         isActive: true,
         createdAt: "2023-03-20",
-        lastTransactionDate: "2024-01-08",
+        lastTransactionDate: "2024-01-08"
       },
       {
         id: "3",
@@ -43,8 +44,8 @@ class BankingService {
         name: "Tarjeta de Crédito",
         isActive: true,
         createdAt: "2023-06-10",
-        lastTransactionDate: "2024-01-09",
-      },
+        lastTransactionDate: "2024-01-09"
+      }
     ];
   }
 
@@ -56,35 +57,29 @@ class BankingService {
     accounts.forEach((account) => {
       for (let i = 0; i < 20; i++) {
         const date = new Date();
+
         date.setDate(date.getDate() - i);
 
         const transactionType = Math.random() > 0.6 ? "credit" : "debit";
-        const description =
-          transactionType === "credit"
-            ? this.getCreditDescription()
-            : this.getDebitDescription();
-        const category =
-          transactionType === "credit"
-            ? this.getCreditCategory()
-            : this.getDebitCategory();
+        const description = transactionType === "credit" ? this.getCreditDescription() : this.getDebitDescription();
+
+        const category = transactionType === "credit" ? this.getCreditCategory() : this.getDebitCategory();
 
         transactions.push({
           id: `${account.id}-${i}`,
           accountId: account.id,
           type: transactionType,
           amount: Math.floor(Math.random() * 500000) + 10000,
-          description: description,
+          description,
           date: date.toISOString().split("T")[0],
           balance: account.balance,
           reference: `REF${Date.now()}${i}`,
-          category: category,
+          category
         });
       }
     });
 
-    return transactions.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
+    return transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
   private getDebitDescription(): string {
@@ -98,11 +93,10 @@ class BankingService {
       "Pago de préstamo",
       "Compra en farmacia",
       "Pago de combustible",
-      "Compra en restaurante",
+      "Compra en restaurante"
     ];
-    return debitDescriptions[
-      Math.floor(Math.random() * debitDescriptions.length)
-    ];
+
+    return debitDescriptions[Math.floor(Math.random() * debitDescriptions.length)];
   }
 
   private getCreditDescription(): string {
@@ -116,50 +110,29 @@ class BankingService {
       "Bono recibido",
       "Reembolso de seguro",
       "Dividendos recibidos",
-      "Depósito por transferencia",
+      "Depósito por transferencia"
     ];
-    return creditDescriptions[
-      Math.floor(Math.random() * creditDescriptions.length)
-    ];
+
+    return creditDescriptions[Math.floor(Math.random() * creditDescriptions.length)];
   }
 
   private getDebitCategory(): string {
-    const debitCategories = [
-      "Alimentación",
-      "Transporte",
-      "Servicios",
-      "Entretenimiento",
-      "Transferencias",
-      "Pagos",
-      "Compras",
-      "Combustible",
-    ];
+    const debitCategories = ["Alimentación", "Transporte", "Servicios", "Entretenimiento", "Transferencias", "Pagos", "Compras", "Combustible"];
+
     return debitCategories[Math.floor(Math.random() * debitCategories.length)];
   }
 
   private getCreditCategory(): string {
-    const creditCategories = [
-      "Salario",
-      "Transferencias",
-      "Depósitos",
-      "Reembolsos",
-      "Intereses",
-      "Bonos",
-      "Ingresos",
-      "Otros",
-    ];
-    return creditCategories[
-      Math.floor(Math.random() * creditCategories.length)
-    ];
+    const creditCategories = ["Salario", "Transferencias", "Depósitos", "Reembolsos", "Intereses", "Bonos", "Ingresos", "Otros"];
+
+    return creditCategories[Math.floor(Math.random() * creditCategories.length)];
   }
 
   // Endpoints simulados
   async getAccounts(): Promise<Account[]> {
     await this.delay(800);
 
-    let accounts = JSON.parse(
-      localStorage.getItem(this.ACCOUNTS_KEY) || "null"
-    );
+    let accounts = JSON.parse(localStorage.getItem(this.ACCOUNTS_KEY) || "null");
 
     if (!accounts) {
       accounts = this.getInitialAccounts();
@@ -173,15 +146,14 @@ class BankingService {
     await this.delay(500);
 
     const accounts = await this.getAccounts();
+
     return accounts.find((acc) => acc.id === accountId) || null;
   }
 
   async getTransactions(accountId: string): Promise<Transaction[]> {
     await this.delay(600);
 
-    let transactions = JSON.parse(
-      localStorage.getItem(this.TRANSACTIONS_KEY) || "null"
-    );
+    let transactions = JSON.parse(localStorage.getItem(this.TRANSACTIONS_KEY) || "null");
 
     if (!transactions) {
       transactions = this.getInitialTransactions();
@@ -191,23 +163,16 @@ class BankingService {
     return transactions.filter((tx: Transaction) => tx.accountId === accountId);
   }
 
-  async transfer(
-    transferData: TransferRequest
-  ): Promise<{ success: boolean; message: string }> {
+  async transfer(transferData: TransferRequest): Promise<{success: boolean; message: string}> {
     await this.delay(1200);
 
     try {
       const accounts = await this.getAccounts();
-      const transactions = JSON.parse(
-        localStorage.getItem(this.TRANSACTIONS_KEY) || "[]"
-      );
+      const transactions = JSON.parse(localStorage.getItem(this.TRANSACTIONS_KEY) || "[]");
 
-      const fromAccount = accounts.find(
-        (acc) => acc.id === transferData.fromAccountId
-      );
-      const toAccount = accounts.find(
-        (acc) => acc.id === transferData.toAccountId
-      );
+      const fromAccount = accounts.find((acc) => acc.id === transferData.fromAccountId);
+
+      const toAccount = accounts.find((acc) => acc.id === transferData.toAccountId);
 
       if (!fromAccount || !toAccount) {
         throw new Error("Cuenta no encontrada");
@@ -235,7 +200,7 @@ class BankingService {
           date: now,
           balance: fromAccount.balance,
           reference,
-          category: "Transferencias",
+          category: "Transferencias"
         },
         {
           id: `${Date.now()}-credit`,
@@ -246,7 +211,7 @@ class BankingService {
           date: now,
           balance: toAccount.balance,
           reference,
-          category: "Transferencias",
+          category: "Transferencias"
         }
       );
 
@@ -256,13 +221,12 @@ class BankingService {
 
       return {
         success: true,
-        message: "Transferencia realizada exitosamente",
+        message: "Transferencia realizada exitosamente"
       };
     } catch (error) {
       return {
         success: false,
-        message:
-          error instanceof Error ? error.message : "Error en la transferencia",
+        message: error instanceof Error ? error.message : "Error en la transferencia"
       };
     }
   }

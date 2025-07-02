@@ -1,16 +1,16 @@
-import { RouteGroup } from "./types/route.types";
-import { authRoutes } from "./routeConfigs/authRoutes";
-import { accountRoutes } from "./routeConfigs/accountRoutes";
+import {RouteGroup} from "./types/route.types";
+import {authRoutes} from "./routeConfigs/authRoutes";
+import {accountRoutes} from "./routeConfigs/accountRoutes";
 
 export const routeGroups: RouteGroup[] = [
   {
     name: "authentication",
-    routes: authRoutes,
+    routes: authRoutes
   },
   {
     name: "dashboard",
-    routes: accountRoutes,
-  },
+    routes: accountRoutes
+  }
 ];
 
 // Función para obtener todas las rutas en un array plano
@@ -24,5 +24,4 @@ export const getRoutesByGroup = (groupName: string) => {
 };
 
 // Función para buscar una ruta específica
-export const findRoute = (path: string) =>
-  getAllRoutes().find((route) => route.path === path);
+export const findRoute = (path: string) => getAllRoutes().find((route) => route.path === path);
